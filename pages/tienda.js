@@ -1,48 +1,45 @@
 import Layout from "../components/layout";
-import ListadoGuitarras from "../components/listadoGuitarras";
-import {useEffect} from "react";
-export default function Tienda() {
-  useEffect(() => {
-    console.log("Tienda");
-    loadGuitarras().then(
-        (guitarras) => {
-            console.log(guitarras);
-        }
-    );
-  });
+import Guitarra from "../components/guitarra";
+import styles from "../styles/grid.module.css";
+export default function Tienda({ guitarras }) {
+  console.log(guitarras);
   return (
     <Layout
       title={"E-commerce"}
       description={"E-commerce de guitarras, amplificadores y accesorios"}
     >
       <main className="contenedor">
-        <h1 className='heading'>Nuestra coleccion</h1>
-        <ListadoGuitarras
-
-
-
-        />
+        <h1 className="heading">Nuestra coleccion</h1>
+        <div className={styles?.grid}>
+        {
+          guitarras?.map((guitarra) => (
+            <Guitarra key={guitarra.id} guitarra={guitarra.attributes} />
+          ))
+        }
+        </div>
       </main>
     </Layout>
   );
 }
 
-export async function loadGuitarras() {
-  const res = await fetch("http://localhost:1337/api/guitarras?populate=imagen");
-  console.log(res);
-  const guitarras = await res.json();
-  console.log(guitarras);
-  return guitarras;
-}
-export async function getStaticProps() {
-  loadGuitarras().then((guitarras) => {
-    console.log(guitarras);
-  }).catch((err) => {
-    console.log("error",err);
-  });
+// export async function getStaticProps() {
+//   const res = await fetch(
+//     `${process.env.API_URL}/guitarras?populate=imagen`
+//   );
+//   const { data: guitarras } = await res.json();
+//   return {
+//     props: {
+//       guitarras,
+//     },
+//   };
+// }
+
+export async function getServerSideProps() {
+  const res = await fetch(`${process.env.API_URL}/guitarras?populate=imagen`);
+  const { data: guitarras } = await res.json();
   return {
     props: {
-
-    }
-  }
+      guitarras,
+    },
+  };
 }

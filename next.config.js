@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images:{
-    formats:['image/webp' ,'image/avif']
+    formats:['image/webp' ,'image/avif'],
+    domains:['res.cloudinary.com']
   }
 }
 
